@@ -28,12 +28,8 @@ namespace DicomToNrrd {
 class ProgramArguments {
 public:
   std::string dicomDir;
+
   std::string outputImage;
-
-  std::string sOutputImagePath;
-
-  std::string sDebugFolder;
-  bool        bDebug;
 };
 
 } // end namespace DicomToNrrd

@@ -19,31 +19,13 @@
             <label>Input Directory of Dicom Images</label>
             <description><![CDATA[Location of Dicom input data]]></description>
         </directory>
-        <string>
-            <name>sOutputImagePath</name>
+        <image>
+            <name>outputImage</name>
             <channel>output</channel>
             <index>1</index>
             <default>None</default>
-            <label>Output Image Path</label>
+            <label>Output Image</label>
             <description><![CDATA[Output Image Path]]></description>
-        </string>
-    </parameters>
-    <parameters>
-        <label>Debug</label>
-        <description><![CDATA[Debug toggle]]></description>
-        <boolean>
-            <name>bDebug</name>
-            <longflag>--debug</longflag>
-            <label>Output debug information</label>
-            <default>false</default>
-            <description><![CDATA[Choose whether to output the debug information and images.]]></description>
-        </boolean>
-        <string>
-            <name>sDebugFolder</name>
-            <longflag>--debugFolder</longflag>
-            <label>Destination folder for debug images</label>
-            <default>None</default>
-            <description><![CDATA[Used only if Debug on. Choose the destination folder of the output debug images.]]></description>
-        </string>
+        </image>
     </parameters>
 </executable>

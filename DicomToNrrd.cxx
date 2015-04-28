@@ -17,13 +17,7 @@
 =============================================================================*/
 
 /* STL includes */
-#include <cmath>
-#include <ctime>
-#include <iostream>
-#include <limits>
-#include <map>
 #include <string>
-#include <vector>
 
 /* Local includes */
 #include "DicomToNrrdCLP.h"
@@ -56,27 +50,6 @@ namespace DicomToNrrd {
   
 } // end namespace DicomToNrrd
 
-namespace
-{
-  /*******************************************************************
-   ** Print all the settings.
-   *******************************************************************/
-  int OutputAllSettings(int argc, char* argv[])
-  {
-    PARSE_ARGS;
-
-    std::cout << "----------------------------------------------------------------------------------" << std::endl;
-    std::cout << "Parameter settings:" << std::endl;
-    std::cout << "----------------------------------------------------------------------------------" << std::endl;
-    std::cout << "input directory              = " << dicomDir << std::endl;
-    std::cout << "output image path            = " << sOutputImagePath << std::endl;
-    std::cout << "bDebug                       = " << bDebug << std::endl;
-    std::cout << "sDebugFolder                 = " << sDebugFolder << std::endl;
-    return 0;
-  }
-
-} // End namespace
-
 /*******************************************************************/
 int main( int argc, char * argv[] )
 {
@@ -84,17 +57,16 @@ int main( int argc, char * argv[] )
   PARSE_ARGS;
 
   DicomToNrrd::ProgramArguments args;
-  args.dicomDir         = dicomDir;
-  args.sOutputImagePath = sOutputImagePath;
-  args.bDebug           = bDebug;
-  args.sDebugFolder     = sDebugFolder;
+  args.dicomDir    = dicomDir;
+  args.outputImage = outputImage;
   
-  if (bDebug) {
-    // Output the arguments
-    OutputAllSettings( argc, argv );
-  }
+
+  itk::ImageIOBase::IOPixelType     inputPixelType;
+  itk::ImageIOBase::IOComponentType inputComponentType;
 
   int ret = EXIT_FAILURE;
+
+  // GetImageType(inputImage, inputPixelType, inputComponentType);
 
   try {
     ret = DicomToNrrd::ExecuteFromFile( args, static_cast<short>(0) );
@@ -107,3 +79,4 @@ int main( int argc, char * argv[] )
 
   return ret;
 }
+

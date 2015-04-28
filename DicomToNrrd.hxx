@@ -22,7 +22,6 @@
 
 /* ITK includes */
 #include <itkImage.h>
-#include <itkImageFileReader.h>
 #include <itkImageFileWriter.h>
 #include <itkGDCMImageIO.h>
 #include <itkGDCMSeriesFileNames.h>
@@ -34,13 +33,8 @@
 #include <itkSmartPointer.h>
 #include <itkSpatialOrientationAdapter.h>
 
-/* VTK includes */
-#include "vtkPolyData.h"
-#include "vtkXMLPolyDataWriter.h"
-
-
 #include "ProgramArguments.h"
-#include "DebugMacros.h"
+
 
 namespace DicomToNrrd {
 
@@ -48,6 +42,7 @@ namespace DicomToNrrd {
   /** Run the algorithm on an input image and write it to the output
       image. */
   /*******************************************************************/
+
   template< class TInput >
   int Execute( TInput * originalImage, itk::SmartPointer< TInput > & resampledInput, DicomToNrrd::ProgramArguments args)
   {
@@ -60,11 +55,7 @@ namespace DicomToNrrd {
     const unsigned char DIMENSION = 3;
 
     typedef itk::Image<TPixelType, DIMENSION>      InputImageType;
-    typedef itk::Image<TPixelType, DIMENSION>      OutputImageType;
     typedef itk::Image<TLabelPixelType, DIMENSION> LabelImageType;
-    typedef itk::Image<TFloatType, DIMENSION>      FloatImageType;
-    typedef itk::Image<unsigned char, DIMENSION>   UCharImageType;
-
     typedef itk::ImageFileWriter<LabelImageType>  WriterLabelType;
 
     typedef typename LabelImageType::SizeType    TSize;
@@ -160,8 +151,7 @@ namespace DicomToNrrd {
       resampleFilter->SetOutputOrigin( lowerPoint );
       resampleFilter->SetOutputSpacing( originalImage->GetSpacing() );
       resampleFilter->SetDefaultPixelValue( minMaxCalculator->GetMinimum() );
-      TRY_UPDATE( resampleFilter );
-      DEBUG_WRITE_LABEL_IMAGE( resampleFilter );
+      resampleFilter->Update();
 
       originalImage = resampleFilter->GetOutput();
     }
@@ -185,17 +175,13 @@ namespace DicomToNrrd {
     const unsigned char DIMENSION = 3;
 
     typedef itk::Image<TPixelType, DIMENSION> InputImageType;
-    typedef itk::Image<TPixelType, DIMENSION> OutputImageType;
     typedef itk::Image<TLabelPixelType, DIMENSION> LabelImageType;
-    typedef itk::Image<TFloatType, DIMENSION> FloatImageType;
     typedef itk::GDCMImageIO ImageIOType;
 
-    typedef itk::Image<unsigned char, DIMENSION> UCharImageType;
     typedef itk::ImageSeriesReader< InputImageType > ReaderType;
     typedef itk::GDCMSeriesFileNames NamesGeneratorType;
     typedef std::vector< std::string >   SeriesIdContainer;
     typedef std::vector< std::string >   FileNamesContainer;
-    typedef itk::ImageFileWriter<OutputImageType> WriterType;
     typedef itk::ImageFileWriter<LabelImageType> WriterLabelType;
 
 
@@ -228,7 +214,7 @@ namespace DicomToNrrd {
       reader->SetFileNames( fileNames );
 
       // Read the input file
-      TRY_UPDATE( reader );
+      reader->Update();
     }
     catch (itk::ExceptionObject &ex)
     {
@@ -247,8 +233,8 @@ namespace DicomToNrrd {
     // Write the result.
     typename WriterLabelType::Pointer writer = WriterLabelType::New();
     writer->SetInput( resampledInput );
-    writer->SetFileName( args.sOutputImagePath );
-    TRY_UPDATE( writer );
+    writer->SetFileName( args.outputImage );
+    writer->Update();
 
     return EXIT_SUCCESS;
   }
