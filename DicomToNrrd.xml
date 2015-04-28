@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <executable>
-    <category>Segmentation</category>
+    <category>Filtering</category>
     <title>Dicom To Nrrd</title>
     <description><![CDATA[Semi-automatically extracts the upper airway from a CT image.]]></description>
     <version>1.0</version>
